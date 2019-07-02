@@ -1,5 +1,5 @@
 <?php
-// git test
+// git test 2
     class Test_Model_Tour extends UnitTestCase {
     
         private $test_pId;
