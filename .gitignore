@@ -1,2 +1,6 @@
 templates/templates_c/
 tmp/
+.cache/
+.config/
+.local/
+.gitconfig
