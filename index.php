@@ -4,7 +4,7 @@
 	# Загружаем router
 	$router = new Router($Registry);
 
-    $r = Registry::getInstance();
+	$r = Registry::getInstance();
 	$r->set('router', $router);	
 
 	$router->setPath (site_path . 'controllers');
