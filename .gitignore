@@ -4,3 +4,4 @@ tmp/
 .config/
 .local/
 .gitconfig
+.bash_history
