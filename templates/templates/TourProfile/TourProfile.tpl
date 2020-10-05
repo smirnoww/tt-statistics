@@ -42,7 +42,7 @@
     		</td>
     
             <td valign="top">
-                <a href="?ctrl=TourGroups&act=AdminList&TourId={$Tour.t_Id}" title="доступно только организатору турнира и админам">Редактировать группы турнира</a>
+                {IF $Auth->CR($admin_AR+$tourorg_AR)}<a href="?ctrl=TourGroups&act=AdminList&TourId={$Tour.t_Id}" title="доступно только организатору турнира и админам">Редактировать группы турнира</a>{/IF}
                 <div id="TourGroups">группы турнира загружаются ...</div>
             </td>
 

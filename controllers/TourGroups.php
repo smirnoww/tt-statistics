@@ -1,6 +1,32 @@
 <?php
 Class Controller_TourGroups Extends Controller_Base {
 
+
+    // Проверяем права пользователя
+    static function CheckPermissions($action, $r) {
+        $GlobalRights = parent::CheckPermissions($action, $r);
+        
+        if ($GlobalRights!==true)
+            return $GlobalRights;
+            
+        // если прошла глобальная проверка прав, проверим права пользователя здесь.
+        $Auth = $r['Auth'];
+ 
+        $AccessMatrix['Index']      		= anonym_AR;
+        $AccessMatrix['ShowGroup']  		= anonym_AR;
+        $AccessMatrix['GetGroupIcon']     	= anonym_AR;
+        $AccessMatrix['TourGroupMeetings']  = anonym_AR;
+        $AccessMatrix['AdminGroupConsist']  = admin_AR;
+        $AccessMatrix['SaveGroupConsist'] 	= admin_AR;
+        $AccessMatrix['AdminList']			= admin_AR;
+        $AccessMatrix['SaveTourGroupsList']	= admin_AR;
+        
+        return $Auth->CR($AccessMatrix[$action]) == 0 ? "У вас недостаточно прав для выполнения этого действия. Выполните вход в систему или обратитесь к администратору сайта." : true;
+        
+    } // Проверяем права пользователя
+ 
+ 
+ 
 	// Выводит закладки с группами для вывода в профиле турнира
 	function Index($r) {
         // Определим id турнира
