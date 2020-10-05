@@ -1,6 +1,29 @@
 <?php
 Class Controller_Organizer Extends Controller_Base {
 
+    // Проверяем права пользователя
+    static function CheckPermissions($action, $r) {
+        $GlobalRights = parent::CheckPermissions($action, $r);
+        
+        if ($GlobalRights!==true)
+            return $GlobalRights;
+            
+        // если прошла глобальная проверка прав, проверим права пользователя здесь.
+        $Auth = $r['Auth'];
+ 
+        $AccessMatrix['Index']      = anonym_AR;
+        $AccessMatrix['ViewCourt']  = anonym_AR;
+        $AccessMatrix['AdminList']	= admin_AR;
+        $AccessMatrix['NewCourt']  	= admin_AR;
+        $AccessMatrix['EditCourt']  = admin_AR;
+        $AccessMatrix['Save'] 		= admin_AR;
+        $AccessMatrix['Delete']		= admin_AR;
+        
+        return $Auth->CR($AccessMatrix[$action]) == 0 ? "У вас недостаточно прав для выполнения этого действия. Выполните вход в систему или обратитесь к администратору сайта." : true;
+        
+    } // Проверяем права пользователя
+ 
+ 
 	function Index($r) {
 	    $smarty = $r['smarty'];
 		$smarty->display('OrganizerLayout.tpl');        
