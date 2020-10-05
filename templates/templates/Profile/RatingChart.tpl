@@ -152,20 +152,7 @@
             {* ========================================= *}    
             {* Запустим график *}
 
-            $.getScript("http://www.tt-saratov.ru/statistics/google_jsapi.js", 
-                        function ( data, textStatus, jqxhr ) {
-                        
-                            google.load("visualization", 
-                                        "1", 
-                                        {ldelim}
-                                            packages:["corechart"], 
-                                            callback:function() {ldelim}
-                                                prepareDateForChart();
-                                            {rdelim}
-                                        {rdelim}
-                            );
-                        }
-            );
+            prepareDateForChart();
             
         }); // $(function() {
         // ПОСЛЕ ЗАГРУЗКИ СТРАНИЦЫ    

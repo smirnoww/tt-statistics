@@ -3,6 +3,11 @@
 
 {block name=head}
     <meta name="description" content="Профиль игрока {$Player->p_Name} саратовской любительской лиги по настольному теннису. Рейтинг, статистика участия в турнирах, инвентарь, разряды, ..." />
+
+	<script src="https://www.gstatic.com/charts/loader.js"></script>
+	<script>
+	  google.charts.load('current', { packages: ['corechart'] } );
+	</script>
 {/block}
 
 {block name=body}
