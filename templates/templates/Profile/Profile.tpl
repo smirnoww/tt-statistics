@@ -27,9 +27,6 @@
 					<br>
 					* Во всплывающей подсказке к ячейкам с рейтингом показывается дата последнего изменения рейтинга
 					</small>
-				<script>
-				$("#ratingdiv").load('?ctrl=Statistics&act=RatingModule');
-				</script>
 			</div>
 		</td>
 
@@ -162,26 +159,33 @@
     </table>
     <!-- Запустим jqueryUI -->
     <script>
-        $( "#tabs" ).tabs({
-							beforeLoad: function( event, ui ) { // Загружаем содержимое страниц только один раз
-																if ( ui.tab.data( "loaded" ) ) {
-																	event.preventDefault();
-																	return;
-																}
-														 
-																ui.jqXHR.success(function() {
-																	ui.tab.data( "loaded", true );
-																});
-										},
-                    		{$ActiveTabCookieName='Profile_'|cat:$Player.p_Id|cat:'_ActiveTab'}
-    						activate:   function( event, ui ) { 
-    						                //Запомним открытую закладку в куках
-    						                var activeTabN = $( event.target ).tabs( "option", "active" );
-    						                document.cookie = '{$ActiveTabCookieName}='+activeTabN;
-    						            },
-						    active: getCookie('{$ActiveTabCookieName}') {* восстановим открытую закладку из куков*}
-						});        
-      //  $( "#Birthdatepicker" ).datepicker();
+		$(function() {
+			// загрузим модуль с рейтингом
+			$("#ratingdiv").load('?ctrl=Statistics&act=RatingModule');
+
+			// закладки в профиле
+			$( "#tabs" ).tabs({
+								beforeLoad: function( event, ui ) { // Загружаем содержимое страниц только один раз
+																	if ( ui.tab.data( "loaded" ) ) {
+																		event.preventDefault();
+																		return;
+																	}
+															 
+																	ui.jqXHR.success(function() {
+																		ui.tab.data( "loaded", true );
+																	});
+											},
+								{$ActiveTabCookieName='Profile_'|cat:$Player.p_Id|cat:'_ActiveTab'}
+								activate:   function( event, ui ) { 
+												//Запомним открытую закладку в куках
+												var activeTabN = $( event.target ).tabs( "option", "active" );
+												document.cookie = '{$ActiveTabCookieName}='+activeTabN;
+											},
+								active: getCookie('{$ActiveTabCookieName}') {* восстановим открытую закладку из куков*}
+							});        
+
+		}); // jquery.ready()
+		
     </script>
 
 {/block}
