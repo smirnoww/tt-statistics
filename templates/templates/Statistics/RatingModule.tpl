@@ -1,7 +1,9 @@
 {* Smarty *}
 
 {if $Players}
+<!--
 <input id="playerFilter"/>
+-->
 <div id="accordionRating">
     {$closed    = true}
     {$rangeFrom = 100000}
