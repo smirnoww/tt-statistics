@@ -1,6 +1,7 @@
 {* Smarty *}
 
 {if $Players}
+<input id="playerFilter"/>
 <div id="accordionRating">
     {$closed    = true}
     {$rangeFrom = 100000}
@@ -81,7 +82,10 @@
 
 <script>
     $( function() {
-        $( "#accordionRating" ).accordion({ heightStyle : "content" });
+        // сделаем аккордион
+		$( "#accordionRating" ).accordion({ heightStyle : "content" });
+		
+		// проставим количество игроков в каждой группе аккордиона
         {foreach $PlayerCounts as $range=>$pCount}
             $('#{$range}').text('( {$pCount} )');
         {/foreach}
