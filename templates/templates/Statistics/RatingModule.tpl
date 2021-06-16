@@ -1,9 +1,13 @@
 {* Smarty *}
 
 {if $Players}
-<!--
+<style>
+td.ratingCell {
+  text-align: center;
+}
+</style>
 <input id="playerFilter"/>
--->
+
 <div id="accordionRating">
     {$closed    = true}
     {$rangeFrom = 100000}
@@ -32,7 +36,7 @@
 				<a href="{$curPageURL}?ctrl=Profile&p_Id={$player.pr_PlayerId}">{$player.p_Name}</a>
 				{IF $player.pr_RankName}<img src="images/black_medal_16.png" title="{$player.pr_RankName} ({$player.pr_DateFrom|date_format:"%d.%m.%Y"})" onclick="alert(this.title);">{/IF}
 			</td>
-			<td align="center" title="Последнее изменение рейтинга было {$player.pr_Date|date_format:'%d.%m.%Y'}{if $player.pre_Date}: 
+			<td class="ratingCell" title="Последнее изменение рейтинга было {$player.pr_Date|date_format:'%d.%m.%Y'}{if $player.pre_Date}: 
 {$player.pre_Rate}({$player.pre_Date|date_format:'%d.%m.%Y'}) 
 {if $player.Delta > 0}+{/if}{$player.Delta} 
 = {$player.pr_Rate}{/if} {$player.pr_Note}">
@@ -91,6 +95,16 @@
         {foreach $PlayerCounts as $range=>$pCount}
             $('#{$range}').text('( {$pCount} )');
         {/foreach}
+		
+		// обработка фильтра
+		$('#playerFilter').on("input",	function(){ 
+											var filterVal = $('#playerFilter').val();
+											if (filterVal.length>2)
+												alert("filterVal.length>2");
+											//else
+											//	alert("! filterVal.length>2");
+										})
+		// $( "#playerFilter" ).change(function(){ alert("change"); });
     } );
 </script>	
 {else}
