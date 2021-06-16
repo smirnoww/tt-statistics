@@ -2,11 +2,12 @@
 
 {if $Players}
 <style>
-td.ratingCell {
+table.ratingTable tr td:last-child {
   text-align: center;
 }
 </style>
-<input id="playerFilter"/>
+
+<div style="white-space: nowrap;"><img src="images/filter.png" height="16"><input id="playerFilter" style="display:table-cell; width:90%" title="фильтр начинае работать, если введено 3 и более символов" size="16"/></div>
 
 <div id="accordionRating">
     {$closed    = true}
@@ -27,35 +28,35 @@ td.ratingCell {
 	        
 	        <h3>{$rangeFrom} - {$rangeTo}  <span id="RatingRange{$rangeFrom}-{$rangeTo}"></span></h3>
 	        <div>
-        	    <table class="tablebg" cellspacing="1" width="100%">
+        	    <table class="tablebg ratingTable" cellspacing="1" width="100%" ratingRange="RatingRange{$rangeFrom}-{$rangeTo}">
 	            {$closed = false}
 	    {/if}
-		<tr class="row1">
-			<td>{$player.nn}</td>
-			<td>
-				<a href="{$curPageURL}?ctrl=Profile&p_Id={$player.pr_PlayerId}">{$player.p_Name}</a>
-				{IF $player.pr_RankName}<img src="images/black_medal_16.png" title="{$player.pr_RankName} ({$player.pr_DateFrom|date_format:"%d.%m.%Y"})" onclick="alert(this.title);">{/IF}
-			</td>
-			<td class="ratingCell" title="Последнее изменение рейтинга было {$player.pr_Date|date_format:'%d.%m.%Y'}{if $player.pre_Date}: 
+					<tr class="row1">
+						<td>{$player.nn}</td>
+						<td>
+							<a href="{$curPageURL}?ctrl=Profile&p_Id={$player.pr_PlayerId}">{$player.p_Name}</a>
+							{IF $player.pr_RankName}<img src="images/black_medal_16.png" title="{$player.pr_RankName} ({$player.pr_DateFrom|date_format:"%d.%m.%Y"})" onclick="alert(this.title);">{/IF}
+						</td>
+						<td title="Последнее изменение рейтинга было {$player.pr_Date|date_format:'%d.%m.%Y'}{if $player.pre_Date}: 
 {$player.pre_Rate}({$player.pre_Date|date_format:'%d.%m.%Y'}) 
 {if $player.Delta > 0}+{/if}{$player.Delta} 
 = {$player.pr_Rate}{/if} {$player.pr_Note}">
 
-    			{$player.pr_Rate|number_format:0:".":"'"}<br>
-    			
-    			{if $player.Delta > 0}
-    				<small><font color="#00AA00">+{$player.Delta|number_format:1:".":"'"}</font></small>
-    			{else if $player.Delta < 0}
-    				<small><font color="#AA0000">{$player.Delta|number_format:1:".":"'"}</font></small>
-    			{/if}
-		    </td>
-		</tr>		
+							{$player.pr_Rate|number_format:0:".":"'"}<br>
+							
+							{if $player.Delta > 0}
+								<small><font color="#00AA00">+{$player.Delta|number_format:1:".":"'"}</font></small>
+							{else if $player.Delta < 0}
+								<small><font color="#AA0000">{$player.Delta|number_format:1:".":"'"}</font></small>
+							{/if}
+						</td>
+					</tr>		
         {$PlayerCount = $PlayerCount+1}
 	{/foreach}
     {* Закроем последний диапазон игроков*}
     {if !$closed}
-        	</table>
-        </div>
+				</table>
+			</div>
         {$PlayerCounts['RatingRange'|cat:$rangeFrom|cat:'-'|cat:$rangeTo] = $PlayerCount}
         {$PlayerCount = 0}
         {$closed = true}
@@ -64,23 +65,7 @@ td.ratingCell {
 
 <script>
     $( function() {
-        // сделаем аккордион
-		$( "#accordionRating" ).accordion({ heightStyle : "content" });
-		
-		// проставим количество игроков в каждой группе аккордиона
-        {foreach $PlayerCounts as $range=>$pCount}
-            $('#{$range}').text('( {$pCount} )');
-        {/foreach}
-		
-		// обработка фильтра
-		$('#playerFilter').on("input",	function(){ 
-											var filterVal = $('#playerFilter').val();
-											if (filterVal.length>2)
-												alert("filterVal.length>2");
-											//else
-											//	alert("! filterVal.length>2");
-										})
-		// $( "#playerFilter" ).change(function(){ alert("change"); });
+		$.getScript('js/ratingModule.js',function() { ratingModuleInit(); });
     } );
 </script>	
 {else}
