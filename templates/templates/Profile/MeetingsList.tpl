@@ -5,10 +5,10 @@
         <tr class="row1">
             <td align="right">
                 <a href="?ctrl=Profile&PlayerId={$Meeting.m_WinnerPlayerId}"{if $Meeting.m_WinnerPlayerId==$Player.p_Id} style="color: green;"{/if}>
-                    {$Meeting.WinnerName}
+                    {$Meeting.WinnerName} ({$Meeting.WinnerRate|number_format:0:".":"'"})
                 </a>
                 {if $Meeting.m_Winner2PlayerId}
-                    <br><a href="?ctrl=Profile&PlayerId={$Meeting.m_Winner2PlayerId}"{if $Meeting.m_Winner2PlayerId==$Player.p_Id} style="color: green;"{/if}>{$Meeting.Winner2Name}</a>
+                    <br><a href="?ctrl=Profile&PlayerId={$Meeting.m_Winner2PlayerId}"{if $Meeting.m_Winner2PlayerId==$Player.p_Id} style="color: green;"{/if}>{$Meeting.Winner2Name} ({$Meeting.Winner2Rate|number_format:0:".":"'"})</a>
                 {/if}
             </td>
         
@@ -16,9 +16,11 @@
             <td align="center">{$Meeting.Score}</td>
             
             <td>
-                <a href="?ctrl=Profile&p_Id={$Meeting.m_LoserPlayerId}"{if $Meeting.m_LoserPlayerId==$Player.p_Id} style="color: red;"{/if}>{$Meeting.LoserName}</a>
+                <a href="?ctrl=Profile&p_Id={$Meeting.m_LoserPlayerId}"{if $Meeting.m_LoserPlayerId==$Player.p_Id} style="color: red;"{/if}>
+					{$Meeting.LoserName} ({$Meeting.LoserRate|number_format:0:".":"'"})
+				</a>
                 {if $Meeting.m_Loser2PlayerId}
-                    <br><a href="?ctrl=Profile&p_Id={$Meeting.m_Loser2PlayerId}"{if $Meeting.m_Loser2PlayerId==$Player.p_Id} style="color: red;"{/if}>{$Meeting.Loser2Name}</a>
+                    <br><a href="?ctrl=Profile&p_Id={$Meeting.m_Loser2PlayerId}"{if $Meeting.m_Loser2PlayerId==$Player.p_Id} style="color: red;"{/if}>{$Meeting.Loser2Name} ({$Meeting.Loser2Rate|number_format:0:".":"'"})</a>
                 {/if}
             </td>
             

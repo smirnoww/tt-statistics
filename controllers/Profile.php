@@ -204,7 +204,16 @@ Class Controller_Profile Extends Controller_Base {
 		}
 
         try {
+			// Получим все встречи игрока за турнир
     		$Meetings = Model_Meeting::getMeetings($TourId, -1, $PlayerId);
+			// Определим рейтинг всех участников всех встреч за день до турнира
+			foreach ($Meetings as $m_Id => $meeting) {
+				$meeting->WinnerRate	= Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_WinnerPlayerId	, $meeting->m_DateTime).pr_Rate;
+				$meeting->Winner2Rate	= Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_Winner2PlayerId	, $meeting->m_DateTime).pr_Rate;
+				$meeting->LoserRate		= Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_LoserPlayerId	, $meeting->m_DateTime).pr_Rate;
+				$meeting->Loser2Rate	= Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_Loser2PlayerId	, $meeting->m_DateTime).pr_Rate;
+			}
+			
 //die(json_encode($Meetings));
     	    $smarty = $r['smarty'];
 
