@@ -32,7 +32,6 @@ Class Router {
 	
 	
 	function delegate() {
-
 		try {
             $startTime = microtime(true);
 		    $successful = 1;
@@ -57,7 +56,6 @@ Class Router {
                 header($_SERVER["SERVER_PROTOCOL"].' 403 Forbidden');
                 die($Permission);
             }
-
 
             // кэшируем GET запросы 
             if ($_SERVER['REQUEST_METHOD']=='GET' && $r['Env']!='DEV') {
@@ -108,6 +106,7 @@ Class Router {
 				
 		}
 		catch (Exception $e) {
+
 		    // -777 - означает, что страница выведена из кэша. это не ошибка
 		    if ($e->getCode()!==-777) {
     		    $successful = 0;
