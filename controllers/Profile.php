@@ -188,7 +188,7 @@ Class Controller_Profile Extends Controller_Base {
 
 
 	// Возвращаем табличку со встречами игрока с фильтром по турниру
-	function PlayerTourMeetings($r) {	
+	function PlayerTourMeetings($r) {
 		// Проверим, что передан id игрока
 		if (isset($r['Params']['PlayerId']))
 			$PlayerId = $r['Params']['PlayerId'];
@@ -207,18 +207,24 @@ Class Controller_Profile Extends Controller_Base {
 			// Получим все встречи игрока за турнир
     		$Meetings = Model_Meeting::getMeetings($TourId, -1, $PlayerId);
 			// Определим рейтинг всех участников всех встреч за день до турнира
+			$PlayersRate = array();
 			foreach ($Meetings as $m_Id => $meeting) {
-				$meeting->WinnerRate	= Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_WinnerPlayerId	, $meeting->m_DateTime).pr_Rate;
-				$meeting->Winner2Rate	= Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_Winner2PlayerId	, $meeting->m_DateTime).pr_Rate;
-				$meeting->LoserRate		= Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_LoserPlayerId	, $meeting->m_DateTime).pr_Rate;
-				$meeting->Loser2Rate	= Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_Loser2PlayerId	, $meeting->m_DateTime).pr_Rate;
+				if (!isset($PlayersRate[$meeting->m_WinnerPlayerId]))
+					$PlayersRate[$meeting->m_WinnerPlayerId] = Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_WinnerPlayerId	, $meeting->m_DateTime).pr_Rate;
+				if (!isset($PlayersRate[$meeting->m_Winner2PlayerId]))
+					$PlayersRate[$meeting->m_Winner2PlayerId] = Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_Winner2PlayerId	, $meeting->m_DateTime).pr_Rate;
+				if (!isset($PlayersRate[$meeting->m_LoserPlayerId]))
+					$PlayersRate[$meeting->m_LoserPlayerId] = Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_LoserPlayerId	, $meeting->m_DateTime).pr_Rate;
+				if (!isset($PlayersRate[$meeting->m_Loser2PlayerId]))
+					$PlayersRate[$meeting->m_Loser2PlayerId] = Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_Loser2PlayerId	, $meeting->m_DateTime).pr_Rate;
 			}
 			
 //die(json_encode($Meetings));
     	    $smarty = $r['smarty'];
 
-    		$smarty->assign('Meetings', $Meetings);	
-    		$smarty->assign('Player', new Model_Player($PlayerId));	
+    		$smarty->assign(	'Meetings',		$Meetings					);	
+    		$smarty->assign(	'PlayersRate',	$PlayersRate				);	
+    		$smarty->assign(	'Player',		new Model_Player($PlayerId)	);	
 
     		$smarty->display('Profile/MeetingsList.tpl');        
         }
@@ -227,7 +233,7 @@ Class Controller_Profile Extends Controller_Base {
             echo "Ошибка при построении списка встреч $e";
 			//http_response_code(500);
         }
-	}
+	}	//	PlayerTourMeetings($r)
 
 
    // Показывает график рейтинга
