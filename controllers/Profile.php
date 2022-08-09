@@ -209,17 +209,17 @@ Class Controller_Profile Extends Controller_Base {
 			// Определим рейтинг всех участников всех встреч за день до турнира
 			$PlayersRate = array();
 			foreach ($Meetings as $m_Id => $meeting) {
-				if (!isset($PlayersRate[$meeting->m_WinnerPlayerId]))
-					$PlayersRate[$meeting->m_WinnerPlayerId] = Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_WinnerPlayerId	, $meeting->m_DateTime).pr_Rate;
-				if (!isset($PlayersRate[$meeting->m_Winner2PlayerId]))
-					$PlayersRate[$meeting->m_Winner2PlayerId] = Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_Winner2PlayerId	, $meeting->m_DateTime).pr_Rate;
-				if (!isset($PlayersRate[$meeting->m_LoserPlayerId]))
-					$PlayersRate[$meeting->m_LoserPlayerId] = Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_LoserPlayerId	, $meeting->m_DateTime).pr_Rate;
-				if (!isset($PlayersRate[$meeting->m_Loser2PlayerId]))
-					$PlayersRate[$meeting->m_Loser2PlayerId] = Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_Loser2PlayerId	, $meeting->m_DateTime).pr_Rate;
+				if (!isset($PlayersRate[$meeting->m_WinnerPlayerId]) && isset($meeting->m_WinnerPlayerId))
+					$PlayersRate[$meeting->m_WinnerPlayerId] = Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_WinnerPlayerId	, $meeting->m_DateTime)->pr_Rate;
+				if (!isset($PlayersRate[$meeting->m_Winner2PlayerId]) && $meeting->m_Winner2PlayerId)
+					$PlayersRate[$meeting->m_Winner2PlayerId] = Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_Winner2PlayerId	, $meeting->m_DateTime)->pr_Rate;
+				if (!isset($PlayersRate[$meeting->m_LoserPlayerId]) && $meeting->m_LoserPlayerId)
+					$PlayersRate[$meeting->m_LoserPlayerId] = Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_LoserPlayerId	, $meeting->m_DateTime)->pr_Rate;
+				if (!isset($PlayersRate[$meeting->m_Loser2PlayerId]) && $meeting->m_Loser2PlayerId)
+					$PlayersRate[$meeting->m_Loser2PlayerId] = Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_Loser2PlayerId	, $meeting->m_DateTime)->pr_Rate;
 			}
 			
-//die(json_encode($Meetings));
+// die(json_encode($PlayersRate));
     	    $smarty = $r['smarty'];
 
     		$smarty->assign(	'Meetings',		$Meetings					);	
