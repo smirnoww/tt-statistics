@@ -70,7 +70,7 @@ Class Controller_Players Extends Controller_Base {
 		foreach ($Players as $player) {
 			$xml .= "\r\n".'	<Player bNew="true" id="'.$player['p_Id'].'">
 			<name>'.$player['p_Name'].'</name>
-			<shortname>'.$player['p_Name'].'</shortname>
+			<shortname>'.$this->FIOshortener($player['p_Name']).'</shortname>
 			<location/>
 			<birthdate>'.$player['p_Birthdate'].'</birthdate>
 			<sex/>
@@ -88,6 +88,25 @@ Class Controller_Players Extends Controller_Base {
 				
 	}
 	
+	private function FIOshortener($fullFIO){
+		$compressed = preg_replace("/\\s+/iu"," ",trim($fullFIO));
+		$parts = explode(' ', $compressed);
+		switch (count($parts)) {
+			case 0:
+				$short = "!пустое фио";
+				break;
+			case 1:
+				$short = $compressed;
+				break;	
+			case 2:
+				$short = $parts[0]." ".$parts[1];
+				break;
+			default:
+				$short = $parts[0]." ".substr($parts[1], 0, 2).".".substr($parts[2], 0, 2).".";
+		}
+		 
+		return $short;		
+	}
 	
 	function AdminPlayers($r) {
 	    $smarty = $r['smarty'];
