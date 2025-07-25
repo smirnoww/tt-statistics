@@ -43,7 +43,11 @@ Class Controller_Profile Extends Controller_Base {
 		$smarty->assign('ExpiredPenaltiesList', $ExpiredPenaltiesList);	
 		$smarty->assign('NonExpiredPenaltiesList', $NonExpiredPenaltiesList);	
 		
-		$smarty->display('Profile/Profile.tpl');        
+		if ($_GET["mobileview"] === 'true') {
+            $smarty->display('Profile/ProfileMobileView.tpl');
+        } else {
+            $smarty->display('Profile/Profile.tpl');
+        }
 	}
 
 
@@ -130,8 +134,12 @@ Class Controller_Profile Extends Controller_Base {
 
 		$smarty->assign('Years', $Years);	
 		$smarty->assign('p_Id', $p_Id);	
-
-		$smarty->display('Profile/YearsList.tpl');        
+		
+		if ($_GET["mobileview"] === 'true') {
+            $smarty->display('Profile/YearsListMobileView.tpl');
+        } else {
+    		$smarty->display('Profile/YearsList.tpl');        
+        }
     }
 
 
@@ -188,7 +196,7 @@ Class Controller_Profile Extends Controller_Base {
 
 
 	// Возвращаем табличку со встречами игрока с фильтром по турниру
-	function PlayerTourMeetings($r) {
+	function PlayerTourMeetings($r) {	
 		// Проверим, что передан id игрока
 		if (isset($r['Params']['PlayerId']))
 			$PlayerId = $r['Params']['PlayerId'];
@@ -204,7 +212,6 @@ Class Controller_Profile Extends Controller_Base {
 		}
 
         try {
-			// Получим все встречи игрока за турнир
     		$Meetings = Model_Meeting::getMeetings($TourId, -1, $PlayerId);
 			// Определим рейтинг всех участников всех встреч за день до турнира
 			$PlayersRate = array();
@@ -218,13 +225,18 @@ Class Controller_Profile Extends Controller_Base {
 				if (!isset($PlayersRate[$meeting->m_Loser2PlayerId]) && $meeting->m_Loser2PlayerId)
 					$PlayersRate[$meeting->m_Loser2PlayerId] = Model_PlayerRateHistory::GetPlayerRateBefore($meeting->m_Loser2PlayerId	, $meeting->m_DateTime)->pr_Rate;
 			}
-			
-// die(json_encode($PlayersRate));
+			function PlayersList($PlayerId) {
+				return new Model_Player($PlayerId);
+			}
+
+//die(json_encode($Meetings));
     	    $smarty = $r['smarty'];
 
-    		$smarty->assign(	'Meetings',		$Meetings					);	
-    		$smarty->assign(	'PlayersRate',	$PlayersRate				);	
-    		$smarty->assign(	'Player',		new Model_Player($PlayerId)	);	
+    		$smarty->assign('Meetings', $Meetings);
+    		$smarty->assign('PlayersRate', $PlayersRate);
+    		$smarty->assign('Player', new Model_Player($PlayerId));	
+			$smarty->assign('PlayersList', $PlayersList);	
+
 
     		$smarty->display('Profile/MeetingsList.tpl');        
         }
@@ -233,7 +245,7 @@ Class Controller_Profile Extends Controller_Base {
             echo "Ошибка при построении списка встреч $e";
 			//http_response_code(500);
         }
-	}	//	PlayerTourMeetings($r)
+	}
 
 
    // Показывает график рейтинга
@@ -259,8 +271,12 @@ Class Controller_Profile Extends Controller_Base {
 		$smarty = $r['smarty'];
     	$smarty->assign('RatingHistory', $rh);   
     	$smarty->assign('MaxRatingHistoryRow', $maxrh);   
-
-		$smarty->display('Profile/RatingChart.tpl');
+    	
+    	if ($_GET["mobileview"] === 'true') {
+            $smarty->display('Profile/RatingChartMobileView.tpl');
+        } else {
+    		$smarty->display('Profile/RatingChart.tpl');        
+        }
     }
 
 
@@ -280,9 +296,13 @@ Class Controller_Profile Extends Controller_Base {
 		$smarty = $r['smarty'];
     	$smarty->assign('p_Id', $p_Id);   
     	$smarty->assign('PlayerRanks', $PlayerRanks);   
-    	$smarty->assign('VictoriesCount', $VictoriesCount);   
-
-		$smarty->display('Profile/PlayerRanks.tpl');
+    	$smarty->assign('VictoriesCount', $VictoriesCount); 
+    	
+    	if ($_GET["mobileview"] === 'true') {
+            $smarty->display('Profile/PlayerRanksMobileView.tpl');
+        } else {
+    		$smarty->display('Profile/PlayerRanks.tpl');        
+        }
     }
 
 

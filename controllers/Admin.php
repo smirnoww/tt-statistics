@@ -15,6 +15,7 @@ Class Controller_Admin Extends Controller_Base {
         $AccessMatrix['Index']      = admin_AR;
         $AccessMatrix['phpinfo']    = admin_AR;
         $AccessMatrix['ArchiveLog'] = anonym_AR;
+        $AccessMatrix['ForceClearCache'] = anonym_AR;
         return $Auth->CR($AccessMatrix[$action]) == 0 ? "У вас недостаточно прав для выполнения этого действия. Выполните вход в систему или обратитесь к администратору сайта." : true;
         
     }
@@ -26,7 +27,12 @@ Class Controller_Admin Extends Controller_Base {
 		$smarty->display('AdminLayout.tpl');        
 	}
 
-
+	function ForceClearCache($r) {
+        // Очистим кэш
+        $r['router']->clearCache();
+	}
+	
+	
     // Архивирование журнала операций
 	function ArchiveLog($r) {
 	    
