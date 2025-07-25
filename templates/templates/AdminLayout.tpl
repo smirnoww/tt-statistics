@@ -35,7 +35,7 @@
 			<td>
 				<a href="?ctrl=Players&act=AdminPlayers">Игроки (на тестировании)</a>
 			    <a href="http://tt-saratov.ru/statistics/xjak/admrating.php?module=playersadmin">- старое (будет удалено)</a>
-			    <small> [<a href="?ctrl=Players&act=xml">Player.xml</a>]</small>
+			    <small> [<a href="?ctrl=Players&act=xml&_={$smarty.now}">Player.xml</a>]</small>
 			</td>
 			<td><a href="?ctrl=Penalties">Взыскания</a></td>
 			<td><a href="?ctrl=Courts&act=AdminList">Площадки/игродромы</a></td>
