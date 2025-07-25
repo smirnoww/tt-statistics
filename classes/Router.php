@@ -65,7 +65,7 @@ Class Router {
             	$cacheFN = cache_dir.$r['Env'].'_'.$params.'_for_'.$r['Auth']->GetRoles().'.cache';
             	
                 // Если существует кэшированная версия:
-                  if (file_exists($cacheFN)) {
+                  if (file_exists($cacheFN) && ($controller_name!='Admin')) {
                     // Читаем и выводим файл
                     readfile($cacheFN);
                     $FromCache  = 1;
