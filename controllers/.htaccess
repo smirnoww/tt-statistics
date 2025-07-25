@@ -1,0 +1,5 @@
+<Files api.php>
+    Order deny,allow 
+    Deny from all 
+    Allow from 45.67.57.2
+</Files>

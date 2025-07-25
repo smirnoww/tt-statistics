@@ -291,12 +291,6 @@ Class Controller_CallsForTour Extends Controller_Base {
 		//Вернёмся на исходную страницу
 		header("Location: $BackURL");
 	}
-	
-	// Добавить игрока в заявку основным для AJAX запросов. возвращает результат выполнения операции
-	function ClearCache($r) {
-        // Очистим кэш
-        $r['router']->clearCache();
-	}
 		
 }
 ?>
