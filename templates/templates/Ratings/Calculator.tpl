@@ -5,6 +5,19 @@
 {block name=head}
 
 <script type="text/javascript">
+    $(function() {
+        $('#formulaId').on('change', function() {
+                                                // Get the new selected value
+                                                var selectedFormulaId = $(this).val();
+                                                if (selectedFormulaId==3) 
+                                                    $('.scoreDependenced').show();
+                                                else
+                                                    $('.scoreDependenced').hide();
+                                           });
+        $('#formulaId').change();
+    });
+
+
     function is_numeric( mixed_var ) {
         return ( mixed_var == '' ) ? false : !isNaN( mixed_var );
     }
@@ -67,8 +80,14 @@
     
     	var winformula = '(100-(РТВ-РТП))/10';
     	var loseformula = '-(100-(РТВ-РТП))/20';
+
     	if (formulaId==2) 
     		loseformula = '-(100-(РТВ-РТП))/15';
+
+    	if (formulaId==3) {
+    	    winformula = '(100-(РТВ-РТП))/10';
+    		loseformula = '-(100-(РТВ-РТП))/15';
+    	}
 
     	var PR = 0.0; 
     	
@@ -162,7 +181,7 @@
         
         btn.val(btn.val()=='Я выиграл'?'Я проиграл':'Я выиграл');
     }
-
+    
 </script>
 
 {/block}
@@ -181,7 +200,16 @@
 			<select id="formulaId">
 				<option value="1">ФНТР (у проигравшего отнимается в 2 раза меньше)</option>
 				<option value="2" {IF $Tour}{IF $Tour->GetFormulaId()==2}selected{/IF}{/IF}>Саратов с 01.08.2013 (у проигравшего отнимается в 1.5 раза меньше)</option>
+				<option value="3" {IF $Tour}{IF $Tour->GetFormulaId()==3}selected{/IF}{/IF}>Саратов с 01.01.2026 (счёт по партиям влияет на дельту)</option>
 			</select>
+		</td>
+	</tr>
+	<tr class="row1 scoreDependenced">
+		<td>	<span style="font-size: 14px;">Коэффициэнты для разницы в счёте</span>		</td>
+		<td>	
+		    <span style="font-size: 14px;">1</span>:<input required id="scoreDif1" type="number" step="0.1" value="{$Rate|default:0.8}" style="width: 50px;">		
+		    <span style="font-size: 14px;">2</span>:<input required id="scoreDif2" type="number" step="0.1" value="{$Rate|default:1}" style="width: 50px;">		
+		    <span style="font-size: 14px;">3+</span>:<input required id="scoreDif3" type="number" step="0.1" value="{$Rate|default:1.2}" style="width: 50px;">		
 		</td>
 	</tr>
 	<tr class="row1">
@@ -196,7 +224,7 @@
 
 
 
-<table id="meetingstable" border="0" class="tablebg" border=1>
+<table id="meetingstable" class="tablebg" border="0">
     <thead>
     	<tr class="cat">
     		<th>X</th><th>Расчет моего приращения рейтинга</th><th>Моя дельта</th><th>Исход встречи</th><th>Рейтинг соперника</th><th>Дельта соперника</th>
