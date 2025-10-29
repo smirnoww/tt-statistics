@@ -8,8 +8,8 @@
 	<td align="left">
 	    <input type="button" name="MeetingResult" value="{if $Meeting.IWon}Я выиграл{else}Я проиграл{/if}" onclick="changewinner({$Meeting.N})">
 	    <span class="scoreDependenced">
-	        <input class="myScore" type="number" value="3" style="width: 50px;">
-	        <input class="oppScore" type="number" value="0" style="width: 50px;">
+	        (<input class="myScore" type="number" value="3" min="0" max="5" style="width: 50px;">
+	        <input class="oppScore" type="number" value="0" min="0" max="5" style="width: 50px;">)
         </span>
     </td>
 	<td name="OpponentRate">

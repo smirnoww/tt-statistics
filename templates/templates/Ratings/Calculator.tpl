@@ -24,8 +24,10 @@
     
     
     function warnElem(elem, warn){
-    	$(elem.parent()).attr('bgcolor',warn ? '#FF0000' : '#FFFFFF');
-    	$(elem).attr('title',warn ? 'Необходимо ввести число' : '')
+        var bgcolor = warn ? '#FF0000' : '#FFFFFF';
+    	$(elem.parent()).attr("style", "background-color: "+bgcolor+";"); //attr('bgcolor', bgcolor);
+    	var warnHint = (warn===true ? 'Необходимо ввести число' : (typeof warn === "string" ? warn : ''));
+    	$(elem).attr('title',warn ? warnHint : '');
     }   //  function warnElem(elem, warn)
     
     
@@ -62,9 +64,20 @@
         		}
         		else
         			warnElem(opprate_elem,false);
+        			
+        		var deltaScore = Math.abs($(element).find('input.myScore').val()-$(element).find('input.oppScore').val());
+                if (deltaScore==0) {
+                    allright = false;
+                    warnElem($(element).find('input.myScore'),'Счёт не может быть ничейным');
+                    warnElem($(element).find('input.oppScore'),'Счёт не может быть ничейным');
+                }
+                else {
+                    warnElem($(element).find('input.myScore'), false);
+                    warnElem($(element).find('input.oppScore'), false);
+                }
     	    }
     	);
-    
+
     	return allright;
     	
     }   //  function checksrc()
@@ -76,7 +89,7 @@
     		return;
     
     	var mysrcrate = parseFloat($('#mysrcrate').val()); 
-    	var formulaId = $('#formulaId').val(); 
+    	var formulaId = parseInt($('#formulaId').val()); 
     
     	var winformula = '(100-(РТВ-РТП))/10';
     	var loseformula = '-(100-(РТВ-РТП))/20';
@@ -105,30 +118,59 @@
         
         		var myPR = 0.0;
         		var oppPR = 0.0;
+        		var deltaScore = Math.abs($(element).find('input.myScore').val()-$(element).find('input.oppScore').val());
+        		deltaScore = Math.min(deltaScore, 3);   //delta can't be more then 3
+        		var krs = $('.scoreDiffCoef[scoreDiff='+deltaScore+']').val();
         		
                 $(element).find('td[name="PRCalculation"]').empty();
                 
                 // I'm winner
         		if (res && (mysrcrate-opprate)<100)
         		{
-        			myPR = (100-(mysrcrate-opprate))/10;
-        			if (formulaId==2)
-        				oppPR = -(100-(mysrcrate-opprate))/15;
-        			else
-        				oppPR = -(100-(mysrcrate-opprate))/20;
+        			switch (formulaId) {
+                        case 1:
+                			myPR = (100-(mysrcrate-opprate))/10.0;
+            				oppPR = -(100-(mysrcrate-opprate))/20.0;
+                        break;
+                        case 2:
+                			myPR = (100-(mysrcrate-opprate))/10.0;
+            				oppPR = -(100-(mysrcrate-opprate))/15.0;
+                        break;
+                        case 3:
+                			myPR = (100-(mysrcrate-opprate))/10.0*krs;
+            				oppPR = -(100-(mysrcrate-opprate))/15.0*krs;
+                        break;
+                        default:
+                            alert('Всё сломалось!');
+                        break;
+                    }
+
         			
-        			formula = '<b>ПРв</b> = '+winformula + ' = '+winformula.replace('РТВ',mysrcrate).replace('РТП',opprate) + ' = <b>'+myPR.toFixed(3)+'</b>';			
+        			formula = '<b>ПРв</b> = '+winformula + ' = '+winformula.replace('РТВ',mysrcrate).replace('РТП',opprate).replace('КРС',krs) + ' = <b>'+myPR.toFixed(3)+'</b>';			
         			$(element).find('td[name="PRCalculation"]').html(formula);
         		}
                 // I'm loser
         		if (!res && opprate-mysrcrate<100){
-        			oppPR = (100.0-(opprate-mysrcrate))/10.0;
-        			if (formulaId==2)
-        				myPR = -(100.0-(opprate-mysrcrate))/15.0;
-        			else
-        				myPR = -(100.0-(opprate-mysrcrate))/20.0;
-        
-        			formula = '<b>ПРп</b> = '+loseformula + ' = '+loseformula.replace('РТВ',opprate).replace('РТП',mysrcrate) + ' = <b>'+myPR.toFixed(3)+'</b>';			
+        			switch (formulaId) {
+                        case 1:
+                			myPR = -(100.0-(opprate-mysrcrate))/20.0;
+            				oppPR = (100.0-(opprate-mysrcrate))/10.0;
+                        break;
+                        case 2:
+                			myPR = -(100.0-(opprate-mysrcrate))/15.0;
+            				oppPR = (100.0-(opprate-mysrcrate))/10.0;
+                        break;
+                        case 3:
+                			myPR = -(100.0-(opprate-mysrcrate))/15.0*krs;
+            				oppPR = (100.0-(opprate-mysrcrate))/10.0*krs;
+                        break;
+                        default:
+                            alert('Всё сломалось!');
+                        break;
+                    }
+
+
+        			formula = '<b>ПРп</b> = '+loseformula + ' = '+loseformula.replace('РТВ',opprate).replace('РТП',mysrcrate).replace('КРС',krs) + ' = <b>'+myPR.toFixed(3)+'</b>';			
         			$(element).find('td[name="PRCalculation"]').html(formula);
         		}
 
@@ -209,9 +251,9 @@
 	<tr class="row1 scoreDependenced">
 		<td>	<span style="font-size: 14px;">Коэффициэнты для разницы в счёте</span>		</td>
 		<td>	
-		    <span style="font-size: 14px;">1</span>:<input required id="scoreDif1" type="number" step="0.1" value="{$Rate|default:0.8}" style="width: 50px;">		
-		    <span style="font-size: 14px;">2</span>:<input required id="scoreDif2" type="number" step="0.1" value="{$Rate|default:1}" style="width: 50px;">		
-		    <span style="font-size: 14px;">3+</span>:<input required id="scoreDif3" type="number" step="0.1" value="{$Rate|default:1.2}" style="width: 50px;">		
+		    <span style="font-size: 14px;">1</span>:<input required class="scoreDiffCoef" scoreDiff="1" type="number" step="0.1" value="{$Rate|default:0.8}" style="width: 50px;">		
+		    <span style="font-size: 14px;">2</span>:<input required class="scoreDiffCoef" scoreDiff="2" type="number" step="0.1" value="{$Rate|default:1}" style="width: 50px;">		
+		    <span style="font-size: 14px;">3+</span>:<input required class="scoreDiffCoef" scoreDiff="3" type="number" step="0.1" value="{$Rate|default:1.2}" style="width: 50px;">		
 		</td>
 	</tr>
 	<tr class="row1">
