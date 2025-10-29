@@ -70,7 +70,7 @@
     }   //  function checksrc()
     
     
-    function recalc(){
+    function recalc() {
     
     	if (!checksrc())
     		return;
@@ -85,8 +85,8 @@
     		loseformula = '-(100-(РТВ-РТП))/15';
 
     	if (formulaId==3) {
-    	    winformula = '(100-(РТВ-РТП))/10';
-    		loseformula = '-(100-(РТВ-РТП))/15';
+    	    winformula = '(100-(РТВ-РТП))/10*КРС';
+    		loseformula = '-(100-(РТВ-РТП))/15*КРС';
     	}
 
     	var PR = 0.0; 
@@ -108,6 +108,7 @@
         		
                 $(element).find('td[name="PRCalculation"]').empty();
                 
+                // I'm winner
         		if (res && (mysrcrate-opprate)<100)
         		{
         			myPR = (100-(mysrcrate-opprate))/10;
@@ -119,7 +120,7 @@
         			formula = '<b>ПРв</b> = '+winformula + ' = '+winformula.replace('РТВ',mysrcrate).replace('РТП',opprate) + ' = <b>'+myPR.toFixed(3)+'</b>';			
         			$(element).find('td[name="PRCalculation"]').html(formula);
         		}
-        
+                // I'm loser
         		if (!res && opprate-mysrcrate<100){
         			oppPR = (100.0-(opprate-mysrcrate))/10.0;
         			if (formulaId==2)
@@ -165,7 +166,8 @@
 	    $.get(
 	            '?ctrl=Ratings&act=CalcTR&MeetingNumber='+maxN,
 	            function(data) {
-					$('#meetingstable tbody').append(data);    	                
+					$('#meetingstable tbody').append(data);
+					$('#formulaId').change();
 				}
 	    );
     }	
@@ -200,7 +202,7 @@
 			<select id="formulaId">
 				<option value="1">ФНТР (у проигравшего отнимается в 2 раза меньше)</option>
 				<option value="2" {IF $Tour}{IF $Tour->GetFormulaId()==2}selected{/IF}{/IF}>Саратов с 01.08.2013 (у проигравшего отнимается в 1.5 раза меньше)</option>
-				<option value="3" {IF $Tour}{IF $Tour->GetFormulaId()==3}selected{/IF}{/IF}>Саратов с 01.01.2026 (счёт по партиям влияет на дельту)</option>
+				<option value="3" {IF $Tour}{IF $Tour->GetFormulaId()==3}selected{/IF}{/IF}>Саратов с 01.01.2026 с учётом разницы в счёте (КРС)</option>
 			</select>
 		</td>
 	</tr>
