@@ -98,8 +98,8 @@
     		loseformula = '-(100-(РТВ-РТП))/15';
 
     	if (formulaId==3) {
-    	    winformula = '(100-(РТВ-РТП))/10*КРС';
-    		loseformula = '-(100-(РТВ-РТП))/15*КРС';
+    	    winformula = '(100-(РТВ-РТП))*КРС/10';
+    		loseformula = '-(100-(РТВ-РТП))*КРС*0.8/10';
     	}
 
     	var PR = 0.0; 
@@ -138,7 +138,7 @@
                         break;
                         case 3:
                 			myPR = (100-(mysrcrate-opprate))/10.0*krs;
-            				oppPR = -(100-(mysrcrate-opprate))/15.0*krs;
+            				oppPR = -(100-(mysrcrate-opprate))*0.8/10.0*krs;
                         break;
                         default:
                             alert('Всё сломалось!');
@@ -161,7 +161,7 @@
             				oppPR = (100.0-(opprate-mysrcrate))/10.0;
                         break;
                         case 3:
-                			myPR = -(100.0-(opprate-mysrcrate))/15.0*krs;
+                			myPR = -(100.0-(opprate-mysrcrate))*0.8/10.0*krs;
             				oppPR = (100.0-(opprate-mysrcrate))/10.0*krs;
                         break;
                         default:
@@ -244,7 +244,7 @@
 			<select id="formulaId">
 				<option value="1">ФНТР (у проигравшего отнимается в 2 раза меньше)</option>
 				<option value="2" {IF $Tour}{IF $Tour->GetFormulaId()==2}selected{/IF}{/IF}>Саратов с 01.08.2013 (у проигравшего отнимается в 1.5 раза меньше)</option>
-				<option value="3" {IF $Tour}{IF $Tour->GetFormulaId()==3}selected{/IF}{/IF}>Саратов с 01.01.2026 с учётом разницы в счёте (КРС)</option>
+				<option value="3" {IF $Tour}{IF $Tour->GetFormulaId()==3}selected{/IF}{/IF}>Саратов с 01.01.2026 у проигравшего дельта 0.8 + учёт разницы в счёте (КРС)</option>
 			</select>
 		</td>
 	</tr>
